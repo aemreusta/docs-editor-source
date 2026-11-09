@@ -1,0 +1,28 @@
+name: upstream-watch
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          pinned=$(grep -oE 'sha256:[0-9a-f]{64}' UPSTREAM.md | head -1)
+          latest=$(gh api repos/ONLYOFFICE/DocumentServer/releases/latest --jq .tag_name)
+          current=$(grep -oE 'tag `v[0-9.]+`' UPSTREAM.md | head -1 | grep -oE 'v[0-9.]+')
+          digest=$(curl -fsS "https://hub.docker.com/v2/repositories/onlyoffice/documentserver/tags/${latest#v}" | jq -r .digest)
+          echo "pinned $current $pinned, latest $latest $digest"
+          if [ "$latest" != "$current" ] || [ "$digest" != "$pinned" ]; then
+            title="Upstream changed: $latest"
+            if [ -z "$(gh issue list --state open --search "$title in:title" --json number --jq '.[0].number // empty')" ]; then
+              gh issue create --title "$title" --body "Pinned $current ($pinned). Latest $latest ($digest). Read the upstream changelog for security fixes, update Dockerfile and UPSTREAM.md, and build."
+            fi
+          fi

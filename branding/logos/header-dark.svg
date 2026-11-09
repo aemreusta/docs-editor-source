@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="77" height="20" viewBox="0 0 170 44" fill="none" role="img" aria-label="Memoris">
+<defs><clipPath id="b"><circle cx="96" cy="25" r="13.5"/></clipPath></defs>
+<text x="0" y="33" font-family="Georgia, 'Times New Roman', serif" font-size="36" font-weight="600" fill="#1a2a33" letter-spacing="-0.5">mem</text>
+<circle cx="96" cy="25" r="13.5" stroke="#1a2a33" stroke-width="3"/>
+<path clip-path="url(#b)" fill="#1a2a33" d="M80 27c4-4 7 3 10-1s7 3 11-1 6 1 11 1v14H80z"/>
+<text x="113" y="33" font-family="Georgia, 'Times New Roman', serif" font-size="36" font-weight="600" fill="#1a2a33" letter-spacing="-0.5">ris</text>
+</svg>
